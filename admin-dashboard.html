@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 transition duration-300">
+
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <!-- SIDEBAR -->
+<aside class="w-64 bg-indigo-700 dark:bg-gray-800 text-white p-6 hidden md:block">
+  <h2 class="text-2xl font-bold mb-8">Admin Panel</h2>
+
+  <ul class="space-y-4">
+
+    <li class="hover:bg-indigo-600 p-2 rounded cursor-pointer transition">
+      Dashboard
+    </li>
+
+    <li class="hover:bg-indigo-600 p-2 rounded cursor-pointer transition">
+      All Complaints
+    </li>
+
+    <!-- Back to Home Button -->
+    <li>
+      <a href="index.html"
+         class="block bg-white text-indigo-700 font-semibold p-2 rounded text-center hover:bg-gray-200 transition">
+         ⬅ Back to Home
+      </a>
+    </li>
+
+  </ul>
+</aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1">
+
+    <!-- TOP NAVBAR -->
+    <div class="flex justify-between items-center bg-white dark:bg-gray-800 shadow px-6 py-4">
+      <h1 class="text-2xl font-bold dark:text-white">Admin Dashboard</h1>
+
+      <div class="flex items-center space-x-4">
+        <button onclick="toggleDarkMode()" class="bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded">
+          🌙
+        </button>
+        <button onclick="logout()"
+          class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD CONTENT -->
+    <div class="p-6">
+
+      <!-- STATS CARDS -->
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+
+        <div class="bg-blue-500 text-white p-6 rounded-xl shadow hover:scale-105 transition">
+          <h3 class="text-lg">Total Complaints</h3>
+          <p class="text-3xl font-bold" id="totalCount">0</p>
+        </div>
+
+        <div class="bg-yellow-500 text-white p-6 rounded-xl shadow hover:scale-105 transition">
+          <h3 class="text-lg">Pending</h3>
+          <p class="text-3xl font-bold" id="pendingCount">0</p>
+        </div>
+
+        <div class="bg-green-600 text-white p-6 rounded-xl shadow hover:scale-105 transition">
+          <h3 class="text-lg">Resolved</h3>
+          <p class="text-3xl font-bold" id="resolvedCount">0</p>
+        </div>
+
+      </div>
+
+      <!-- COMPLAINT TABLE -->
+      <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
+
+        <div class="p-4 border-b dark:border-gray-700">
+          <h2 class="text-xl font-semibold dark:text-white">All Complaints</h2>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-gray-200 dark:bg-gray-700 dark:text-white">
+              <tr>
+                <th class="p-4">Student ID</th>
+                <th class="p-4">Title</th>
+                <th class="p-4">Department</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Update</th>
+              </tr>
+            </thead>
+            <tbody id="complaintTable" class="dark:text-white"></tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function loadComplaints() {
+  let complaints = JSON.parse(localStorage.getItem("complaints")) || [];
+  let table = document.getElementById("complaintTable");
+
+  table.innerHTML = "";
+
+  let pending = 0;
+  let resolved = 0;
+
+  complaints.forEach((c, index) => {
+
+    if (c.status === "Resolved") resolved++;
+    else pending++;
+
+    let badgeColor = c.status === "Resolved"
+      ? "bg-green-500"
+      : "bg-yellow-500";
+
+    table.innerHTML += `
+      <tr class="border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+        <td class="p-4">${c.studentId}</td>
+        <td class="p-4">${c.title}</td>
+        <td class="p-4">${c.department}</td>
+        <td class="p-4">
+          <span class="text-white px-3 py-1 rounded ${badgeColor}">
+            ${c.status}
+          </span>
+        </td>
+        <td class="p-4">
+          <select onchange="updateStatus(${index}, this.value)"
+            class="border rounded p-1 dark:bg-gray-700">
+            <option ${c.status==="Pending"?"selected":""}>Pending</option>
+            <option ${c.status==="Resolved"?"selected":""}>Resolved</option>
+          </select>
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("totalCount").innerText = complaints.length;
+  document.getElementById("pendingCount").innerText = pending;
+  document.getElementById("resolvedCount").innerText = resolved;
+}
+
+function updateStatus(index, value) {
+  let complaints = JSON.parse(localStorage.getItem("complaints")) || [];
+  complaints[index].status = value;
+  localStorage.setItem("complaints", JSON.stringify(complaints));
+  loadComplaints();
+}
+
+function logout() {
+  localStorage.removeItem("adminLoggedIn");
+  window.location.href = "admin-login.html";
+}
+
+function toggleDarkMode(){
+  document.documentElement.classList.toggle("dark");
+}
+
+loadComplaints();
+</script>
+
+</body>
+</html>

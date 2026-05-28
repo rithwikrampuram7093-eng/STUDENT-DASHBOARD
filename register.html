@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+
+<body class="min-h-screen flex transition duration-300 dark:bg-gray-900">
+
+<!-- LEFT SIDE (College Students Image) -->
+<div class="hidden md:flex w-1/2 relative">
+
+  <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+       class="w-full h-full object-cover" />
+
+  <div class="absolute inset-0 bg-black/60"></div>
+
+  <div class="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-10">
+    <h1 class="text-4xl font-bold mb-4">
+      Join College Complaint Portal
+    </h1>
+    <p class="text-lg opacity-90">
+      Register to submit and track your campus issues easily.
+    </p>
+  </div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="flex w-full md:w-1/2 items-center justify-center bg-gradient-to-br from-blue-700 to-indigo-800 dark:from-gray-800 dark:to-gray-900 p-6 relative">
+
+  <!-- Top Buttons -->
+  <div class="absolute top-6 right-6 flex space-x-3">
+
+    <a href="index.html"
+       class="bg-white dark:bg-gray-700 dark:text-white text-blue-700 px-4 py-2 rounded-lg shadow hover:scale-105 transition">
+       ⬅ Home
+    </a>
+
+    <button onclick="toggleDarkMode()"
+       class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg shadow hover:scale-105 transition">
+       <span id="darkIcon">🌙</span>
+    </button>
+
+  </div>
+
+  <!-- Register Card -->
+  <div class="bg-white/90 dark:bg-gray-800 dark:text-white backdrop-blur-md shadow-2xl rounded-2xl p-10 w-full max-w-md animate-fade transition duration-300">
+
+    <h2 class="text-3xl font-bold text-center mb-6">
+      Student Register
+    </h2>
+
+    <form id="registerForm" class="space-y-5">
+
+      <input type="text" id="name" placeholder="Full Name" required
+        class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
+
+      <input type="text" id="roll" placeholder="Roll No" required
+        class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
+
+      <input type="email" id="email" placeholder="Email" required
+        class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
+
+      <div class="relative">
+        <input type="password" id="password" placeholder="Password" required
+          class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
+        <button type="button" onclick="togglePassword()"
+          class="absolute right-3 top-3">
+          👁
+        </button>
+      </div>
+
+      <button
+        class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transform hover:scale-105 transition duration-200 shadow-lg">
+        Register
+      </button>
+
+    </form>
+
+    <p class="text-center mt-5">
+      Already have account?
+      <a href="login.html" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+        Login
+      </a>
+    </p>
+
+  </div>
+
+</div>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade {
+  animation: fadeIn 0.8s ease forwards;
+}
+</style>
+
+<script>
+
+/* REGISTER FUNCTION */
+document.getElementById("registerForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+
+  let newStudent = {
+    name: name.value,
+    roll: roll.value,
+    email: email.value,
+    password: password.value
+  };
+
+  students.push(newStudent);
+  localStorage.setItem("students", JSON.stringify(students));
+
+  alert("Registration Successful!");
+  window.location.href="login.html";
+});
+
+/* SHOW PASSWORD */
+function togglePassword(){
+  let pass = document.getElementById("password");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+
+/* DARK MODE */
+function toggleDarkMode(){
+  document.documentElement.classList.toggle("dark");
+
+  if(document.documentElement.classList.contains("dark")){
+    localStorage.setItem("theme","dark");
+    document.getElementById("darkIcon").innerText="☀";
+  } else {
+    localStorage.setItem("theme","light");
+    document.getElementById("darkIcon").innerText="🌙";
+  }
+}
+
+if(localStorage.getItem("theme")==="dark"){
+  document.documentElement.classList.add("dark");
+  document.getElementById("darkIcon").innerText="☀";
+}
+
+</script>
+
+</body>
+</html>

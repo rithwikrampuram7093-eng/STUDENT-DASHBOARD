@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+
+<body class="min-h-screen flex dark:bg-gray-900 transition duration-300">
+
+<!-- LEFT SIDE (College Image) -->
+<div class="hidden md:flex w-1/2 relative">
+
+  <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b"
+       class="w-full h-full object-cover" />
+
+  <div class="absolute inset-0 bg-black/50"></div>
+
+  <div class="absolute inset-0 flex flex-col justify-center items-center text-white p-10 text-center">
+    <h1 class="text-4xl font-bold mb-4">
+      College Complaint Portal
+    </h1>
+    <p class="text-lg opacity-90">
+      Track and manage campus issues seamlessly.
+    </p>
+  </div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="flex w-full md:w-1/2 items-center justify-center bg-gradient-to-br from-blue-700 to-indigo-800 dark:from-gray-800 dark:to-gray-900 p-6 relative">
+
+  <!-- Top Buttons -->
+  <div class="absolute top-6 right-6 flex space-x-3">
+
+    <a href="index.html"
+       class="bg-white dark:bg-gray-700 dark:text-white text-blue-700 px-4 py-2 rounded-lg shadow hover:scale-105 transition">
+       ⬅ Home
+    </a>
+
+    <button onclick="toggleDarkMode()"
+       class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg shadow hover:scale-105 transition">
+       <span id="darkIcon">🌙</span>
+    </button>
+
+  </div>
+
+  <!-- Login Card -->
+  <div class="bg-white dark:bg-gray-800 dark:text-white/90 backdrop-blur-md shadow-2xl rounded-2xl p-10 w-full max-w-md animate-fade transition duration-300">
+
+    <h2 class="text-3xl font-bold text-center mb-6">
+      Student Login
+    </h2>
+
+    <form id="loginForm" class="space-y-5">
+
+      <div>
+        <label class="block mb-2 font-medium">Email</label>
+        <input type="email" id="email" required
+          class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
+      </div>
+
+      <div>
+        <label class="block mb-2 font-medium">Password</label>
+        <div class="relative">
+          <input type="password" id="password" required
+            class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
+          <button type="button" onclick="togglePassword()"
+            class="absolute right-3 top-3">
+            👁
+          </button>
+        </div>
+      </div>
+
+      <button
+        class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold hover:bg-green-700 transform hover:scale-105 transition duration-200">
+        Login
+      </button>
+
+    </form>
+
+    <p class="text-center mt-5">
+      New user?
+      <a href="register.html" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+        Register
+      </a>
+    </p>
+
+  </div>
+
+</div>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade {
+  animation: fadeIn 0.8s ease forwards;
+}
+</style>
+
+<script>
+/* LOGIN FUNCTION */
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+
+  let user = students.find(s =>
+    s.email === email.value && s.password === password.value
+  );
+
+  if(user){
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    window.location.href="student-dashboard.html";
+  } else {
+    alert("Invalid Credentials");
+  }
+});
+
+/* SHOW / HIDE PASSWORD */
+function togglePassword(){
+  let pass = document.getElementById("password");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+
+/* DARK MODE TOGGLE */
+function toggleDarkMode(){
+  document.documentElement.classList.toggle("dark");
+
+  if(document.documentElement.classList.contains("dark")){
+    localStorage.setItem("theme","dark");
+    document.getElementById("darkIcon").innerText="☀";
+  } else {
+    localStorage.setItem("theme","light");
+    document.getElementById("darkIcon").innerText="🌙";
+  }
+}
+
+/* LOAD SAVED THEME */
+if(localStorage.getItem("theme")==="dark"){
+  document.documentElement.classList.add("dark");
+  document.getElementById("darkIcon").innerText="☀";
+}
+</script>
+
+</body>
+</html>

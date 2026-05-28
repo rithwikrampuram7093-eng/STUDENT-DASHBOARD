@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+
+<body class="min-h-screen flex transition duration-300 dark:bg-gray-900">
+
+<!-- LEFT SIDE (Admin Theme Image) -->
+<div class="hidden md:flex w-1/2 relative">
+
+  <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+       class="w-full h-full object-cover" />
+
+  <div class="absolute inset-0 bg-black/60"></div>
+
+  <div class="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-10">
+    <h1 class="text-4xl font-bold mb-4">
+      Admin Control Panel
+    </h1>
+    <p class="text-lg opacity-90">
+      Manage and monitor all student complaints efficiently.
+    </p>
+  </div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="flex w-full md:w-1/2 items-center justify-center bg-gradient-to-br from-yellow-500 to-orange-600 dark:from-gray-800 dark:to-gray-900 p-6 relative">
+
+  <!-- Top Buttons -->
+  <div class="absolute top-6 right-6 flex space-x-3">
+
+    <a href="index.html"
+       class="bg-white dark:bg-gray-700 dark:text-white text-black px-4 py-2 rounded-lg shadow hover:scale-105 transition">
+       ⬅ Home
+    </a>
+
+    <button onclick="toggleDarkMode()"
+       class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg shadow hover:scale-105 transition">
+       <span id="darkIcon">🌙</span>
+    </button>
+
+  </div>
+
+  <!-- Login Card -->
+  <div class="bg-white/90 dark:bg-gray-800 dark:text-white backdrop-blur-md shadow-2xl rounded-2xl p-10 w-full max-w-md animate-fade transition duration-300">
+
+    <div class="flex justify-center mb-4">
+      <span class="bg-yellow-500 text-white px-4 py-1 rounded-full text-sm font-semibold shadow">
+        ADMIN ACCESS
+      </span>
+    </div>
+
+    <h2 class="text-3xl font-bold text-center mb-6">
+      Admin Login
+    </h2>
+
+    <form id="adminLoginForm" class="space-y-5">
+
+      <div>
+        <label class="block mb-2 font-medium">Email</label>
+        <input type="email" id="adminEmail" required
+          class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-yellow-500 outline-none transition">
+      </div>
+
+      <div>
+        <label class="block mb-2 font-medium">Password</label>
+        <div class="relative">
+          <input type="password" id="adminPassword" required
+            class="w-full p-3 rounded-lg border dark:border-gray-600 dark:bg-gray-700 focus:ring-2 focus:ring-yellow-500 outline-none transition">
+          <button type="button" onclick="togglePassword()"
+            class="absolute right-3 top-3">
+            👁
+          </button>
+        </div>
+      </div>
+
+      <button
+        class="w-full bg-yellow-500 text-black p-3 rounded-lg font-semibold hover:bg-yellow-600 transform hover:scale-105 transition duration-200 shadow-lg">
+        Login
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade {
+  animation: fadeIn 0.8s ease forwards;
+}
+</style>
+
+<script>
+
+/* ADMIN LOGIN */
+document.getElementById("adminLoginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  if(adminEmail.value==="admin@college.com" && adminPassword.value==="admin123"){
+    localStorage.setItem("adminLoggedIn", true);
+    window.location.href="admin-dashboard.html";
+  } else {
+    alert("Invalid Admin Credentials");
+  }
+});
+
+/* SHOW/HIDE PASSWORD */
+function togglePassword(){
+  let pass = document.getElementById("adminPassword");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+
+/* DARK MODE */
+function toggleDarkMode(){
+  document.documentElement.classList.toggle("dark");
+
+  if(document.documentElement.classList.contains("dark")){
+    localStorage.setItem("theme","dark");
+    document.getElementById("darkIcon").innerText="☀";
+  } else {
+    localStorage.setItem("theme","light");
+    document.getElementById("darkIcon").innerText="🌙";
+  }
+}
+
+if(localStorage.getItem("theme")==="dark"){
+  document.documentElement.classList.add("dark");
+  document.getElementById("darkIcon").innerText="☀";
+}
+
+</script>
+
+</body>
+</html>
